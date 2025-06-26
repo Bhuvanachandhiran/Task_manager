@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Add Task{% endblock %}
+{% block content %}
+<h2><i class="fas fa-plus"></i> Add Task</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.title.label }} {{ form.title(class="form-control") }}
+        {% for error in form.title.errors %}
+            <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label }} {{ form.description(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.category.label }} {{ form.category(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.due_date.label }} {{ form.due_date(class="form-control") }}
+        {% for error in form.due_date.errors %}
+            <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        {{ form.status.label }} {{ form.status(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.priority.label }} {{ form.priority(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.tags.label }} {{ form.tags(class="form-control", placeholder="e.g., Urgent,Project,Routine") }}
+    </div>
+    {{ form.submit(class="btn btn-primary btn-3d") }}
+</form>
+{% endblock %}

@@ -1,0 +1,184 @@
+:root {
+    --bg-color: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 255, 255, 0.5)), url('https://images.unsplash.com/photo-1500581273-223723b7d55c');
+    --text-color: #fff;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+}
+:root[data-theme="dark"] {
+    --bg-color: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1500581273-223723b7d55c');
+    --text-color: #ddd;
+    --card-bg: rgba(30, 30, 30, 0.95);
+    --navbar-bg: rgba(50, 50, 50, 0.9);
+}
+body {
+    background: var(--bg-color) no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-color);
+    font-family: 'Arial', sans-serif;
+}
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.container {
+    max-width: 1200px;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.alert {
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.btn-3d {
+    position: relative;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 0 0 #007bff;
+}
+.btn-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 6px 0 #0056b3;
+}
+.btn-3d:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 0 #0056b3;
+}
+.task-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s, opacity 0.5s;
+}
+.task-overdue {
+    border-left: 5px solid #dc3545;
+}
+.task-high-priority {
+    background-color: #f8d7da;
+}
+.task-medium-priority {
+    background-color: #fff3cd;
+}
+.task-low-priority {
+    background-color: #d4edda;
+}
+.task-completed {
+    background-color: #28a745 !important;
+    transform: scale(1.05);
+}
+.task-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+}
+.tag {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 5px;
+    font-size: 0.8em;
+}
+.task-card.drag-over {
+    border: 2px dashed #007bff;
+}
+.progress {
+    height: 10px;
+}
+.progress-bar {
+    background-color: #28a745;
+    transition: width 0.3s ease;
+}
+.timer {
+    font-family: monospace;
+    color: #007bff;
+}
+.notes-preview {
+    color: #6c757d;
+    font-style: italic;
+}
+/* Input Fields Styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    outline: none;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+/* Label and Heading Styles */
+label,
+h2, h3, h4, h5, h6,
+p,
+.form-text,
+a {
+    transition: color 0.3s ease;
+}
+/* Light Theme Styles */
+:root[data-theme="light"] input[type="text"],
+:root[data-theme="light"] input[type="email"],
+:root[data-theme="light"] input[type="password"],
+:root[data-theme="light"] input[type="date"],
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] select {
+    background-color: #fff;
+    color: #000;
+}
+:root[data-theme="light"] ::placeholder {
+    color: #555;
+    opacity: 1;
+}
+:root[data-theme="light"] label,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] h4,
+:root[data-theme="light"] h5,
+:root[data-theme="light"] h6,
+:root[data-theme="light"] p,
+:root[data-theme="light"] .form-text,
+:root[data-theme="light"] a {
+    color: #000;
+}
+/* Dark Theme Styles */
+:root[data-theme="dark"] input[type="text"],
+:root[data-theme="dark"] input[type="email"],
+:root[data-theme="dark"] input[type="password"],
+:root[data-theme="dark"] input[type="date"],
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select {
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #555;
+}
+:root[data-theme="dark"] ::placeholder {
+    color: #ccc;
+    opacity: 1;
+}
+:root[data-theme="dark"] label,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] h5,
+:root[data-theme="dark"] h6,
+:root[data-theme="dark"] p,
+:root[data-theme="dark"] .form-text,
+:root[data-theme="dark"] a {
+    color: #fff;
+}
+/* Focus Effect */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}

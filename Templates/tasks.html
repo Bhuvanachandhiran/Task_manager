@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<h2><i class="fas fa-tasks"></i> Your Tasks</h2>
+<p><i class="fas fa-info-circle"></i> Drag and drop tasks to reorder them.</p>
+<div class="mb-3">
+    <form id="filter-form" class="row g-3">
+        <div class="col-auto">
+            <label for="search" class="visually-hidden">Search</label>
+            <input type="text" id="search" class="form-control" placeholder="Search tasks...">
+        </div>
+        <div class="col-auto">
+            <label for="category" class="visually-hidden">Category</label>
+            <select name="category" id="category" class="form-select">
+                <option value="all" {% if category == 'all' %}selected{% endif %}>All Categories</option>
+                <option value="Work" {% if category == 'Work' %}selected{% endif %}>Work</option>
+                <option value="Personal" {% if category == 'Personal' %}selected{% endif %}>Personal</option>
+                <option value="Other" {% if category == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="status" class="visually-hidden">Status</label>
+            <select name="status" id="status" class="form-select">
+                <option value="all" {% if status == 'all' %}selected{% endif %}>All Statuses</option>
+                <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="In Progress" {% if status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Completed" {% if status == 'Completed' %}selected{% endif %}>Completed</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="sort" class="visually-hidden">Sort</label>
+            <select name="sort" id="sort" class="form-select">
+                <option value="order" {% if sort == 'order' %}selected{% endif %}>Custom Order</option>
+                <option value="due_date_asc" {% if sort == 'due_date_asc' %}selected{% endif %}>Due Date (Asc)</option>
+                <option value="due_date_desc" {% if sort == 'due_date_desc' %}selected{% endif %}>Due Date (Desc)</option>
+                <option value="priority" {% if sort == 'priority' %}selected{% endif %}>Priority</option>
+            </select>
+        </div>
+    </form>
+</div>
+<a href="{{ url_for('add_task') }}" class="btn btn-primary btn-3d mb-3"><i class="fas fa-plus"></i> Add Task</a>
+<div id="task-list">
+    {% for task in tasks %}
+    <div class="task-card {% if task.due_date and task.due_date < now and task.status != 'Completed' %}task-overdue{% endif %} task-{{ task.priority|lower }}-priority" draggable="true" data-task-id="{{ task.id }}">
+        <h5>{{ task.title }} <i class="fas fa-tasks"></i></h5>
+        <p>{{ task.description or 'No description' }}</p>
+        <div class="progress mb-2">
+            <div class="progress-bar" role="progressbar" style="width: {{ task.progress }}%;" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100">
+                <span class="visually-hidden">{{ task.progress }}% Complete</span>
+            </div>
+        </div>
+        <input type="range" class="form-range progress-slider" min="0" max="100" value="{{ task.progress }}" data-task-id="{{ task.id }}">
+        <p><strong>Time Spent:</strong> <span class="timer" data-time="{{ task.time_spent }}">{{ '%02d'|format((task.time_spent // 3600)) }}:{{ '%02d'|format((task.time_spent % 3600) // 60) }}:{{ '%02d'|format(task.time_spent % 60) }}</span></p>
+        <p><strong>Category:</strong> {{ task.category }}</p>
+        <p><strong>Due Date:</strong> {{ task.due_date.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Status:</strong> {{ task.status }}</p>
+        <p><strong>Priority:</strong> {{ task.priority }}</p>
+        <p><strong>Tags:</strong> {% if task.tags %}
+            {% for tag in task.tags.split(',')|map('trim') %}
+                <span class="tag">{{ tag }}</span>
+            {% endfor %}
+            {% else %}None{% endif %}</p>
+        <p><strong>Notes:</strong> <span class="notes-preview">{% if task.notes is not none and task.notes|length > 0 %}{{ task.notes|truncate(20, true) }}{% else %}None{% endif %}</span></p>
+        <button class="btn btn-sm btn-primary btn-3d notes-btn" data-task-id="{{ task.id }}" data-bs-toggle="modal" data-bs-target="#notesModal">Add Notes</button>
+        <button class="btn btn-sm btn-info btn-3d timer-btn" data-task-id="{{ task.id }}" data-action="start">Start Timer</button>
+        <button class="btn btn-sm btn-secondary btn-3d timer-btn" data-task-id="{{ task.id }}" data-action="reset">Reset Timer</button>
+        <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-warning btn-3d">Edit</a>
+        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger btn-3d" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
+        <button class="btn btn-sm btn-success btn-3d mark-complete" data-task-id="{{ task.id }}" {% if task.status == 'Completed' %}disabled{% endif %}>Mark as Completed</button>
+    </div>
+    {% endfor %}
+</div>
+<!-- Notes Modal -->
+<div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notesModalLabel">Task Notes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="notesInput" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveNotesBtn">Save Notes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

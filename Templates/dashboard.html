@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2><i class="fas fa-tachometer-alt"></i> Task Dashboard</h2>
+
+<!-- Bar Chart for Task Status -->
+<canvas id="statusChart" width="400" height="200"></canvas>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded. Please include the Chart.js CDN in base.html.');
+        } else {
+            const ctx = document.getElementById('statusChart')?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Pending', 'In Progress', 'Completed'],
+                        datasets: [{
+                            label: 'Task Status',
+                            data: [
+                                {{ status_counts.get('Pending', 0) | int }},
+                                {{ status_counts.get('In Progress', 0) | int }},
+                                {{ status_counts.get('Completed', 0) | int }}
+                            ],
+                            backgroundColor: ['#dc3545', '#ffc107', '#28a745']
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error('Canvas element "statusChart" not found.');
+            }
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded. Please include the Chart.js CDN in base.html.');
+        } else {
+            const ctx2 = document.getElementById('priorityChart')?.getContext('2d');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: ['High', 'Medium', 'Low'],
+                        datasets: [{
+                            data: [
+                                {{ priority_counts.get('High', 0) | int }},
+                                {{ priority_counts.get('Medium', 0) | int }},
+                                {{ priority_counts.get('Low', 0) | int }}
+                            ],
+                            backgroundColor: ['#dc3545', '#ffc107', '#28a745']
+                        }]
+                    }
+                });
+            } else {
+                console.error('Canvas element "priorityChart" not found.');
+            }
+        }
+    });
+</script>
+    }
+</script>
+{% endblock %}
